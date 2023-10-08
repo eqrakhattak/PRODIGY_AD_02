@@ -31,7 +31,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  void _taskCreator() {
+  List<ToDo> todosList = ToDo.todoList();
+
+  void _openTaskCreator() {
     showModalBottomSheet(
         context: context,
         builder: (context) => const TodoCreatorWidget()
@@ -118,99 +120,18 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           const SizedBox(height: 20,),
           Expanded(
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              // shrinkWrap: true,
-              children: [
-                TodoWidget(todo: ToDo(id: '098', todoTime: '07:40', todoTask: 'Do the Dishes'),),
-                // Text(
-                //   'Task',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-                // Text(
-                //   'Date',
-                //   style: Theme.of(context).textTheme.headlineMedium,
-                // ),
-              ],
+            child: ListView.builder(
+              itemCount: todosList.length,
+              itemBuilder: (context, index) {
+                return TodoWidget(todo: todosList[index]);
+              },
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _taskCreator,
-        tooltip: 'Add Task',
+        onPressed: _openTaskCreator,
+        tooltip: 'Create Task',
         child: const Icon(Icons.add),
       ),
     );
