@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/model/todo.dart';
+import 'package:todo/provider/todoProvider.dart';
 
 class TodoCreatorWidget extends StatefulWidget {
   const TodoCreatorWidget({super.key});
@@ -12,21 +14,21 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
 
   TimeOfDay time = const TimeOfDay(hour: 09, minute: 30);
   final _todoTextController = TextEditingController();
-  List<ToDo> todosList = ToDo.todoList();
 
-  void _addTodo(String todoItem, String todoInstant){
-    setState(() {
-      todosList.add(
-        ToDo(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          todoTime: todoInstant,
-          todoTask: todoItem,
-        ),
-      );
-    });
+  void _addTodo(String todoItem, String todoInstant) {
+    final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
+
+    final newTodo = ToDo(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      todoTime: todoInstant,
+      todoTask: todoItem,
+    );
+
+    todoProvider.addTodo(newTodo);
+
     Navigator.of(context).pop();
-    print(todosList.length);
   }
+
 
   @override
   Widget build(BuildContext context) {

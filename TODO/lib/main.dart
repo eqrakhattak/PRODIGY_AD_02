@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:todo/model/todo.dart';
 import 'package:todo/widgets/todoWidget.dart';
 import 'widgets/todoCreatorWidget.dart';
+import 'package:provider/provider.dart';
+import 'package:todo/provider/todoProvider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (BuildContext context) => ToDoProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -30,8 +36,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  List<ToDo> todosList = ToDo.todoList();
 
   void _openTaskCreator() {
     showModalBottomSheet(
@@ -119,13 +123,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           const SizedBox(height: 20,),
-          Expanded(
-            child: ListView.builder(
-              itemCount: todosList.length,
-              itemBuilder: (context, index) {
-                return TodoWidget(todo: todosList[index]);
-              },
-            ),
+          Consumer<ToDoProvider>(
+            builder: (context, todoProvider, child) {
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: todoProvider.todosList.length,
+                  itemBuilder: (context, index) {
+                    return TodoWidget(todo: todoProvider.todosList[index]);
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),

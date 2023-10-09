@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/model/todo.dart';
+import 'package:todo/provider/todoProvider.dart';
 
 class TodoWidget extends StatefulWidget {
   final ToDo todo;
@@ -29,15 +31,11 @@ class _TodoWidgetState extends State<TodoWidget> {
 
   }
 
-  void _delete(){
-    // String id
-    setState(() {
-      // todosList.removeWhere((item) => item.id == id);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+
+    final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
+
     return Card(
       color: Colors.amber,
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
@@ -88,7 +86,9 @@ class _TodoWidgetState extends State<TodoWidget> {
                     tooltip: 'edit task',),
                 ),
                 IconButton(
-                  onPressed: _delete,
+                  onPressed: () {
+                    todoProvider.deleteTodo(widget.todo.id ?? "");
+                  },
                   icon: const Icon(CupertinoIcons.trash),
                   padding: const EdgeInsets.all(5.0),
                   constraints: const BoxConstraints(),
