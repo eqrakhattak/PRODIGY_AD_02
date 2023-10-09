@@ -46,23 +46,28 @@ class _TodoWidgetState extends State<TodoWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Text(
-                  widget.todo.todoTime!,
-                  style: const TextStyle(
-                    fontSize: 18.0,
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    widget.todo.todoTime!,
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 20,),
-                Text(
-                  widget.todo.todoTask!,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    decoration: todoTextDecoration,
+                  const SizedBox(width: 20,),
+                  Expanded(
+                    child: Text(
+                      widget.todo.todoTask!,
+                      softWrap: true,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        decoration: todoTextDecoration,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Row(
               children: [
