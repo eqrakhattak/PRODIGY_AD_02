@@ -87,7 +87,7 @@ class _TodoWidgetState extends State<TodoWidget> {
                 ),
                 IconButton(
                   onPressed: () {
-                    todoProvider.deleteTodo(widget.todo.id ?? "");
+                    todoProvider.deleteTodo(context, widget.todo.id ?? "");
                   },
                   icon: const Icon(CupertinoIcons.trash),
                   padding: const EdgeInsets.all(5.0),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/model/todo.dart';
 import 'package:todo/provider/todoProvider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class TodoCreatorWidget extends StatefulWidget {
   const TodoCreatorWidget({super.key});
@@ -25,7 +26,6 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
     );
 
     todoProvider.addTodo(newTodo);
-
     Navigator.of(context).pop();
   }
 
@@ -35,6 +35,8 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
     final String hours = time.hour.toString().padLeft(2, '0');
     final String minutes = time.minute.toString().padLeft(2, '0');
     final String timeText = '$hours:$minutes';
+
+    final String todoControllerText = _todoTextController.text.trim();
 
     return Container(
       height: 320,
@@ -86,7 +88,21 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
           ),
           const Expanded(child: SizedBox()),
           FloatingActionButton(
-            onPressed: () => _addTodo(_todoTextController.text, timeText),
+            onPressed: () {
+              if(todoControllerText.isNotEmpty){
+                _addTodo(todoControllerText, timeText);
+              } else {
+                Fluttertoast.showToast(
+                    msg: "Enter Todo Item",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    // backgroundColor: Colors.red,
+                    // textColor: Colors.white,
+                    // fontSize: 16.0
+                );
+              }
+            },
             tooltip: 'Add Task',
             child: const Icon(Icons.done),
           ),

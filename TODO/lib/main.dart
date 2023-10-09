@@ -131,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   itemBuilder: (context, index) {
                     return TodoWidget(todo: todoProvider.todosList[index]);
                   },
+                  physics: const BouncingScrollPhysics(),
                 ),
               );
             },
