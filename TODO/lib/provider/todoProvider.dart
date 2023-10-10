@@ -13,4 +13,12 @@ class ToDoProvider extends ChangeNotifier {
     todosList.removeWhere((todo) => todo.id == todoId);
     notifyListeners();
   }
+
+  void editTodo(String todoId, String updatedTask, String updatedTime) {
+    final todo = todosList.firstWhere((todo) => todo.id == todoId, orElse: () => ToDo(id: '', todoTime: '', todoTask: ''));
+
+    todo.todoTask = updatedTask;
+    todo.todoTime = updatedTime;
+    notifyListeners();
+  }
 }

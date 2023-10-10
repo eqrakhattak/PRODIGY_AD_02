@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/model/todo.dart';
 import 'package:todo/provider/todoProvider.dart';
-import 'package:todo/widgets/todoCreatorWidget.dart';
+import 'package:todo/widgets/todoEditorWidget.dart';
 
 class TodoWidget extends StatefulWidget {
   final ToDo todo;
@@ -26,6 +26,13 @@ class _TodoWidgetState extends State<TodoWidget> {
       todoTextDecoration = TextDecoration.lineThrough;
       editButtonVisibility = false;
     });
+  }
+
+  void _editTodo(ToDo todo) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => TodoEditorWidget(todo: todo),
+    );
   }
 
   void _deleteTodo(){
@@ -101,7 +108,7 @@ class _TodoWidgetState extends State<TodoWidget> {
                 Visibility(
                   visible: editButtonVisibility,
                   child: IconButton(
-                    onPressed: _editTodo,
+                    onPressed: () => _editTodo(widget.todo),
                     icon: const Icon(CupertinoIcons.pencil),
                     padding: const EdgeInsets.all(5.0),
                     constraints: const BoxConstraints(),
