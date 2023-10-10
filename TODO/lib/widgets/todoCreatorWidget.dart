@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/model/todo.dart';
@@ -18,11 +20,18 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
 
   void _addTodo(String todoItem, String todoInstant) {
     final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
+    final Random random = Random();
 
     final newTodo = ToDo(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       todoTime: todoInstant,
       todoTask: todoItem,
+      backgroundColor: Color.fromRGBO(
+        random.nextInt(256),
+        random.nextInt(256),
+        random.nextInt(256),
+        1.0, // Alpha (fully opaque)
+      ),
     );
 
     todoProvider.addTodo(newTodo);
