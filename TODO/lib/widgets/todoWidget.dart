@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/model/todo.dart';
 import 'package:todo/provider/todoProvider.dart';
+import 'package:todo/widgets/todoCreatorWidget.dart';
 
 class TodoWidget extends StatefulWidget {
   final ToDo todo;
@@ -18,7 +19,7 @@ class _TodoWidgetState extends State<TodoWidget> {
   TextDecoration todoTextDecoration = TextDecoration.none;
   bool editButtonVisibility = true;
 
-  void _done(){
+  void _completeTodo(){
     setState(() {
       widget.todo.isDone = true;
       iconColor = Colors.green;
@@ -27,14 +28,35 @@ class _TodoWidgetState extends State<TodoWidget> {
     });
   }
 
-  void _edit(){
+  void _deleteTodo(){
+    final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                todoProvider.deleteTodo(widget.todo.id ?? "");
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
 
-    final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
 
     return Card(
       color: Colors.amber,
@@ -70,7 +92,7 @@ class _TodoWidgetState extends State<TodoWidget> {
             Row(
               children: [
                 IconButton(
-                  onPressed: _done,
+                  onPressed: _completeTodo,
                   icon: Icon(Icons.done, color: iconColor,),
                   padding: const EdgeInsets.all(5.0),
                   constraints: const BoxConstraints(),
@@ -79,16 +101,14 @@ class _TodoWidgetState extends State<TodoWidget> {
                 Visibility(
                   visible: editButtonVisibility,
                   child: IconButton(
-                    onPressed: _edit,
+                    onPressed: _editTodo,
                     icon: const Icon(CupertinoIcons.pencil),
                     padding: const EdgeInsets.all(5.0),
                     constraints: const BoxConstraints(),
                     tooltip: 'edit task',),
                 ),
                 IconButton(
-                  onPressed: () {
-                    todoProvider.deleteTodo(context, widget.todo.id ?? "");
-                  },
+                  onPressed: _deleteTodo,
                   icon: const Icon(CupertinoIcons.trash),
                   padding: const EdgeInsets.all(5.0),
                   constraints: const BoxConstraints(),

@@ -29,7 +29,6 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
     Navigator.of(context).pop();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final String hours = time.hour.toString().padLeft(2, '0');
@@ -93,13 +92,10 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
                 _addTodo(todoControllerText, timeText);
               } else {
                 Fluttertoast.showToast(
-                    msg: "Enter Todo Item",
+                    msg: "Enter Todo Item & Time",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     timeInSecForIosWeb: 1,
-                    // backgroundColor: Colors.red,
-                    // textColor: Colors.white,
-                    // fontSize: 16.0
                 );
               }
             },
