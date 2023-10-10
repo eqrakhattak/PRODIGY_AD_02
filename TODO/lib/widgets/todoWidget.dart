@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,24 +7,10 @@ import 'package:todo/widgets/todoEditorWidget.dart';
 
 class TodoWidget extends StatefulWidget {
   final ToDo todo;
-  // final Color randomColor;
-  //
-  // TodoWidget({Key? key, required this.todo}) : randomColor = getRandomColor(), super(key: key);
-
   const TodoWidget({super.key, required this.todo});
 
   @override
   State<TodoWidget> createState() => _TodoWidgetState();
-
-  // static Color getRandomColor() {
-  //   final Random random = Random();
-  //   return Color.fromRGBO(
-  //     random.nextInt(256),
-  //     random.nextInt(256),
-  //     random.nextInt(256),
-  //     1.0, // Alpha (fully opaque)
-  //   );
-  // }
 }
 
 class _TodoWidgetState extends State<TodoWidget> {

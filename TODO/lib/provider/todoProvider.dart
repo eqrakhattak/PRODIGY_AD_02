@@ -15,7 +15,7 @@ class ToDoProvider extends ChangeNotifier {
   }
 
   void editTodo(String todoId, String updatedTask, String updatedTime) {
-    final todo = todosList.firstWhere((todo) => todo.id == todoId, orElse: () => ToDo(id: '', todoTime: '', todoTask: '', backgroundColor: Colors.white));
+    final todo = todosList.firstWhere((todo) => todo.id == todoId, orElse: () => ToDo(id: '', todoTime: '', todoTask: '', backgroundColor: Colors.black));
 
     todo.todoTask = updatedTask;
     todo.todoTime = updatedTime;
