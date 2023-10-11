@@ -64,6 +64,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Consumer<ToDoProvider>(
             builder: (context, todoProvider, child) {
+              // Sort the todos list by time in ascending order
+              todoProvider.todosList.sort((a, b) {
+                final timeA = DateTime.parse('2023-10-08 ${a.todoTime}:00');
+                final timeB = DateTime.parse('2023-10-08 ${b.todoTime}:00');
+                return timeA.compareTo(timeB);
+              });
               return Expanded(
                 child: ListView.builder(
                   itemCount: todoProvider.todosList.length,
