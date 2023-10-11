@@ -102,7 +102,8 @@ class _TodoEditorWidgetState extends State<TodoEditorWidget> {
           FloatingActionButton(
             onPressed: _editTodo,
             tooltip: 'Edit Task',
-            child: const Icon(Icons.done),
+            backgroundColor: Colors.indigo,
+            child: const Icon(Icons.done, color: Colors.white,),
           ),
           const SizedBox(height: 18,)
         ],

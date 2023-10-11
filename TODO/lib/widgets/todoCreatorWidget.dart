@@ -108,7 +108,8 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
               }
             },
             tooltip: 'Add Task',
-            child: const Icon(Icons.done),
+            backgroundColor: Colors.indigo,
+            child: const Icon(Icons.done, color: Colors.white,),
           ),
           const SizedBox(height: 18,)
         ],
