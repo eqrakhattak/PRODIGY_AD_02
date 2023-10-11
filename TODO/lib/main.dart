@@ -3,6 +3,7 @@ import 'package:todo/widgets/todoWidget.dart';
 import 'widgets/todoCreatorWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/provider/todoProvider.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 
 void main() {
   runApp(
@@ -55,74 +56,34 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisSize: MainAxisSize.max,
         children: [
           const SizedBox(height: 20,),
-          const SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-                  Text('B'),
-                  SizedBox(width: 10,),
-
-                ],
+          EasyDateTimeLine(
+            initialDate: DateTime.now(),
+            onDateChange: (selectedDate) {
+              //`selectedDate` the new date selected.
+            },
+            activeColor: Colors.indigo,
+            headerProps: EasyHeaderProps(
+              selectedDateStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: 20.0,),
+              selectedDateFormat: SelectedDateFormat.fullDateDayAsStrMY,
+            ),
+            dayProps: const EasyDayProps(
+              height: 56.0,
+              width: 56.0,
+              dayStructure: DayStructure.dayNumDayStr,
+              inactiveDayStyle: DayStyle(
+                decoration: BoxDecoration(),
+                dayNumStyle: TextStyle(
+                  fontSize: 18.0,
+                ),
               ),
-          ),
-          const SizedBox(height: 20,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Date',
-              style: Theme.of(context).textTheme.headlineMedium,
+              activeDayStyle: DayStyle(
+                dayNumStyle: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 20,),
           Consumer<ToDoProvider>(
             builder: (context, todoProvider, child) {
               return Expanded(
