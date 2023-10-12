@@ -66,7 +66,7 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
                 color: Colors.black
               ),
               decoration: const InputDecoration(
-                hintText: 'What do you want TODO?',
+                hintText: 'e.g. Buy Groceries..',
               ),
             ),
           ),

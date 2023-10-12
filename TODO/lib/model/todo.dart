@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 class ToDo {
@@ -18,12 +17,12 @@ class ToDo {
 
   static List<ToDo> todoList() {
     return [
-      ToDo(id: '01', todoTime: '07:30', todoTask: 'Morning Exercise', backgroundColor: Colors.red),
-      ToDo(id: '02', todoTime: '08:00', todoTask: 'Buy Groceries', backgroundColor: Colors.purple),
-      ToDo(id: '03', todoTime: '09:00', todoTask: 'Check Emails', backgroundColor: Colors.teal),
-      ToDo(id: '04', todoTime: '09:25', todoTask: 'Team Meeting', backgroundColor: Colors.blue),
-      ToDo(id: '05', todoTime: '10:00', todoTask: 'Work on mobile apps for 2 hours', backgroundColor: Colors.yellow),
-      ToDo(id: '06', todoTime: '21:00', todoTask: 'Dinner with Jenny', backgroundColor: Colors.orangeAccent),
+      // ToDo(id: '01', todoTime: '07:30', todoTask: 'Morning Exercise', backgroundColor: Colors.red),
+      // ToDo(id: '02', todoTime: '08:00', todoTask: 'Buy Groceries', backgroundColor: Colors.purple),
+      // ToDo(id: '03', todoTime: '09:00', todoTask: 'Check Emails', backgroundColor: Colors.teal),
+      // ToDo(id: '04', todoTime: '09:25', todoTask: 'Team Meeting', backgroundColor: Colors.blue),
+      // ToDo(id: '05', todoTime: '10:00', todoTask: 'Work on mobile apps for 2 hours', backgroundColor: Colors.yellow),
+      // ToDo(id: '06', todoTime: '21:00', todoTask: 'Dinner with Jenny', backgroundColor: Colors.orangeAccent),
     ];
   }
 }

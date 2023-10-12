@@ -70,15 +70,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 final timeB = DateTime.parse('2023-10-08 ${b.todoTime}:00');
                 return timeA.compareTo(timeB);
               });
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: todoProvider.todosList.length,
-                  itemBuilder: (context, index) {
-                    return TodoWidget(todo: todoProvider.todosList[index]);
-                  },
-                  physics: const BouncingScrollPhysics(),
-                ),
-              );
+
+              if (todoProvider.todosList.isEmpty) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 30,),
+                    Center(
+                      child: Text("No todos today", style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 25),),
+                    ),
+                  ],
+                );
+              } else {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: todoProvider.todosList.length,
+                    itemBuilder: (context, index) {
+                      return TodoWidget(todo: todoProvider.todosList[index]);
+                    },
+                    physics: const BouncingScrollPhysics(),
+                  ),
+                );
+              }
             },
           ),
         ],
