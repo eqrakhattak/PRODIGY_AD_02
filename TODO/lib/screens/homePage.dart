@@ -16,10 +16,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  DateTime selectedDate = DateTime.now();
+
   void _openTaskCreator() {
     showModalBottomSheet(
         context: context,
-        builder: (context) => const TodoCreatorWidget()
+        builder: (context) => TodoCreatorWidget(selectedDate: selectedDate,)
     );
   }
 
@@ -35,9 +37,11 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           const SizedBox(height: 20,),
           EasyDateTimeLine(
-            initialDate: DateTime.now(),
-            onDateChange: (selectedDate) {
-              //`selectedDate` the new date selected.
+            initialDate: selectedDate,
+            onDateChange: (newSelectedDate) {
+              setState(() {
+                selectedDate = newSelectedDate;
+              });
             },
             activeColor: Colors.indigo,
             headerProps: EasyHeaderProps(
@@ -64,14 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Consumer<ToDoProvider>(
             builder: (context, todoProvider, child) {
+              final todosForSelectedDate = todoProvider.getTodosForDate(selectedDate);
               // Sort the todos list by time in ascending order
-              todoProvider.todosList.sort((a, b) {
+              todosForSelectedDate.sort((a, b) {
                 final timeA = DateTime.parse('2023-10-08 ${a.todoTime}:00');
                 final timeB = DateTime.parse('2023-10-08 ${b.todoTime}:00');
                 return timeA.compareTo(timeB);
               });
 
-              if (todoProvider.todosList.isEmpty) {
+              if (todosForSelectedDate.isEmpty) {
                 return Column(
                   children: [
                     const SizedBox(height: 30,),
@@ -83,9 +88,9 @@ class _MyHomePageState extends State<MyHomePage> {
               } else {
                 return Expanded(
                   child: ListView.builder(
-                    itemCount: todoProvider.todosList.length,
+                    itemCount: todosForSelectedDate.length,
                     itemBuilder: (context, index) {
-                      return TodoWidget(todo: todoProvider.todosList[index]);
+                      return TodoWidget(todo: todosForSelectedDate[index]);
                     },
                     physics: const BouncingScrollPhysics(),
                   ),

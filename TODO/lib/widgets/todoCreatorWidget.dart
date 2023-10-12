@@ -6,7 +6,8 @@ import 'package:todo/provider/todoProvider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class TodoCreatorWidget extends StatefulWidget {
-  const TodoCreatorWidget({super.key});
+  final DateTime selectedDate;
+  const TodoCreatorWidget({super.key, required this.selectedDate,});
 
   @override
   State<TodoCreatorWidget> createState() => _TodoCreatorWidgetState();
@@ -17,7 +18,7 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
   TimeOfDay time = const TimeOfDay(hour: 09, minute: 30);
   final _todoTextController = TextEditingController();
 
-  void _addTodo(String todoItem, String todoInstant) {
+  void _addTodo(String todoItem, String todoInstant, DateTime selectedDate) {
     final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
     final Random random = Random();
 
@@ -31,6 +32,7 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
         random.nextInt(256),
         1.0, // Alpha (fully opaque)
       ),
+      todoDate: selectedDate,
     );
 
     todoProvider.addTodo(newTodo);
@@ -97,7 +99,7 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
           FloatingActionButton(
             onPressed: () {
               if(todoControllerText.isNotEmpty){
-                _addTodo(todoControllerText, timeText);
+                _addTodo(todoControllerText, timeText, widget.selectedDate);
               } else {
                 Fluttertoast.showToast(
                     msg: "Enter Todo Item & Time",
