@@ -27,4 +27,27 @@ class ToDo {
       ToDo(id: '06', todoTime: '21:00', todoTask: 'Dinner with Jenny', backgroundColor: Colors.orangeAccent, todoDate: DateTime(2023, 10, 12),),
     ];
   }
+
+  // Add a method to convert a To/Do object to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'todoTime': todoTime,
+      'todoTask': todoTask,
+      'backgroundColor': backgroundColor.value,
+      'todoDate': todoDate.toIso8601String(),
+    };
+  }
+
+  // Add a factory method to create a To/Do object from JSON
+  factory ToDo.fromJson(Map<String, dynamic> json) {
+    return ToDo(
+      id: json['id'],
+      todoTime: json['todoTime'],
+      todoTask: json['todoTask'],
+      backgroundColor: Color(json['backgroundColor']),
+      // Assuming that 'todoDate' is stored as a String in ISO8601 format in your JSON
+      todoDate: DateTime.parse(json['todoDate']),
+    );
+  }
 }
