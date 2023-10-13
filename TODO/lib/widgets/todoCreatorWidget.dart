@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/model/todo.dart';
 import 'package:todo/provider/todoProvider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TodoCreatorWidget extends StatefulWidget {
   final DateTime selectedDate;
@@ -18,7 +20,7 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
   TimeOfDay time = const TimeOfDay(hour: 09, minute: 30);
   final _todoTextController = TextEditingController();
 
-  void _addTodo(String todoItem, String todoInstant, DateTime selectedDate) {
+  Future<void> _addTodo(String todoItem, String todoInstant, DateTime selectedDate) async {
     final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
     final Random random = Random();
 
@@ -37,6 +39,12 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
 
     todoProvider.addTodo(newTodo);
     Navigator.of(context).pop();
+
+    // To save todos
+    final prefs = await SharedPreferences.getInstance();
+    final todosAsJson = todoProvider.todosList.map((todo) => todo.toJson()).toList();
+    final todosAsString = todosAsJson.map((json) => jsonEncode(json)).toList();
+    await prefs.setStringList('todos', todosAsString);
   }
 
   @override
@@ -102,7 +110,7 @@ class _TodoCreatorWidgetState extends State<TodoCreatorWidget> {
                 _addTodo(todoControllerText, timeText, widget.selectedDate);
               } else {
                 Fluttertoast.showToast(
-                    msg: "Enter Todo Item & Time",
+                    msg: "Enter todo item & Select time",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     timeInSecForIosWeb: 1,

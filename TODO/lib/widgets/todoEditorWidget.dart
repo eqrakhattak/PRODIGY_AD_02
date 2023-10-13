@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo/model/todo.dart';
 import 'package:todo/provider/todoProvider.dart';
 
@@ -33,25 +36,54 @@ class _TodoEditorWidgetState extends State<TodoEditorWidget> {
     }
   }
 
-  void _editTodo() {
+  Future<void> _editTodo() async {
     final String updatedTask = _todoTextController.text.trim();
     final String updatedTime = '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
 
     if (updatedTask.isNotEmpty) {
-      Provider.of<ToDoProvider>(context, listen: false).editTodo(
+      final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
+
+      // Update the to/do in the provider
+      todoProvider.editTodo(
         widget.todo.id ?? "",
         updatedTask,
         updatedTime,
       );
+
+      // Update the to/do in SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final savedTodos = prefs.getStringList('todos');
+
+      if (savedTodos != null) {
+        final todosList = savedTodos.map((jsonString) => ToDo.fromJson(jsonDecode(jsonString))).toList();
+        final index = todosList.indexWhere((todo) => todo.id == widget.todo.id);
+        if (index != -1) {
+          final updatedTodo = ToDo(
+            id: widget.todo.id,
+            todoTime: updatedTime,
+            todoTask: updatedTask,
+            backgroundColor: widget.todo.backgroundColor,
+            todoDate: widget.todo.todoDate,
+          );
+          todosList[index] = updatedTodo;
+        }
+
+        final updatedTodosAsJson = todosList.map((todo) => jsonEncode(todo.toJson())).toList();
+        await prefs.setStringList('todos', updatedTodosAsJson);
+      }
+
       Navigator.of(context).pop();
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
     final String hours = time.hour.toString().padLeft(2, '0');
     final String minutes = time.minute.toString().padLeft(2, '0');
     final String timeText = '$hours:$minutes';
+
+    final String todoControllerText = _todoTextController.text.trim();
 
     return Container(
       height: 320,
@@ -100,7 +132,18 @@ class _TodoEditorWidgetState extends State<TodoEditorWidget> {
           ),
           const Expanded(child: SizedBox()),
           FloatingActionButton(
-            onPressed: _editTodo,
+            onPressed: () {
+              if(todoControllerText.isNotEmpty){
+                _editTodo();
+              } else {
+                Fluttertoast.showToast(
+                  msg: "Todo item can't be empty",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                );
+              }
+            },
             tooltip: 'Edit Task',
             backgroundColor: Colors.indigo,
             child: const Icon(Icons.done, color: Colors.white,),

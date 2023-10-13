@@ -25,6 +25,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final todoProvider = Provider.of<ToDoProvider>(context);
+  //   todoProvider.loadTodos();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,35 +73,46 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          Consumer<ToDoProvider>(
-            builder: (context, todoProvider, child) {
-              final todosForSelectedDate = todoProvider.getTodosForDate(selectedDate);
-              // Sort the todos list by time in ascending order
-              todosForSelectedDate.sort((a, b) {
-                final timeA = DateTime.parse('2023-10-08 ${a.todoTime}:00');
-                final timeB = DateTime.parse('2023-10-08 ${b.todoTime}:00');
-                return timeA.compareTo(timeB);
-              });
+          FutureBuilder<void>(
+            future: Provider.of<ToDoProvider>(context).loadTodos(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Consumer<ToDoProvider>(
+                  builder: (context, todoProvider, child) {
+                    final todosForSelectedDate = todoProvider.getTodosForDate(selectedDate);
+                    // Sort the todos list by time in ascending order
+                    todosForSelectedDate.sort((a, b) {
+                      final timeA = DateTime.parse('2023-10-08 ${a.todoTime}:00');
+                      final timeB = DateTime.parse('2023-10-08 ${b.todoTime}:00');
+                      return timeA.compareTo(timeB);
+                    });
 
-              if (todosForSelectedDate.isEmpty) {
-                return Column(
-                  children: [
-                    const SizedBox(height: 30,),
-                    Center(
-                      child: Text("No todos today", style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 25),),
-                    ),
-                  ],
+                    if (todosForSelectedDate.isEmpty) {
+                      return Column(
+                        children: [
+                          const SizedBox(height: 30,),
+                          Center(
+                            child: Text("No todos today", style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 25),),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: todosForSelectedDate.length,
+                          itemBuilder: (context, index) {
+                            return TodoWidget(todo: todosForSelectedDate[index]);
+                          },
+                          physics: const BouncingScrollPhysics(),
+                        ),
+                      );
+                    }
+                  },
                 );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
               } else {
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: todosForSelectedDate.length,
-                    itemBuilder: (context, index) {
-                      return TodoWidget(todo: todosForSelectedDate[index]);
-                    },
-                    physics: const BouncingScrollPhysics(),
-                  ),
-                );
+                return const Center(child: Text('Error loading todos'));
               }
             },
           ),
