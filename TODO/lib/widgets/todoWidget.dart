@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo/model/todo.dart';
 import 'package:todo/provider/todoProvider.dart';
 import 'package:todo/widgets/todoEditorWidget.dart';
@@ -19,7 +22,7 @@ class _TodoWidgetState extends State<TodoWidget> {
   TextDecoration _todoTextDecoration = TextDecoration.none;
   bool _editButtonVisibility = true;
 
-  void _markAsDone(){
+  void _markAsDone() async {
     setState(() {
       widget.todo.isDone = true;
       _iconColor = Colors.green;
@@ -28,7 +31,7 @@ class _TodoWidgetState extends State<TodoWidget> {
     });
   }
 
-  void _unmarkAsDone(){
+  void _unmarkAsDone() async {
     setState(() {
       widget.todo.isDone = false;
       _iconColor = Colors.white;
@@ -45,7 +48,6 @@ class _TodoWidgetState extends State<TodoWidget> {
   }
 
   void _deleteTodo(){
-    final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -58,8 +60,26 @@ class _TodoWidgetState extends State<TodoWidget> {
               child: const Text('Cancel', style: TextStyle(color: Colors.black),),
             ),
             TextButton(
-              onPressed: () {
-                todoProvider.deleteTodo(widget.todo.id ?? "");
+              onPressed: () async {
+                final todoProvider = Provider.of<ToDoProvider>(context, listen: false);
+                final prefs = await SharedPreferences.getInstance();
+                const todosKey = 'todos';
+                final todos = prefs.getStringList(todosKey);
+
+                if (todos != null) {
+                  // Remove the deleted to/do from the provider
+                  final todoId = widget.todo.id;
+                  todoProvider.deleteTodo(todoId!);
+
+                  // Remove the deleted to/do from the shared preferences
+                  final updatedTodos = todos.where((todoJson) {
+                    final todo = ToDo.fromJson(jsonDecode(todoJson));
+                    return todo.id != todoId;
+                  }).toList();
+
+                  await prefs.setStringList(todosKey, updatedTodos);
+                }
+
                 Navigator.pop(context);
               },
               child: const Text('OK', style: TextStyle(color: Colors.black),),
