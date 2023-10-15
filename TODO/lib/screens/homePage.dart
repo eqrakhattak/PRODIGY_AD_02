@@ -25,13 +25,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   final todoProvider = Provider.of<ToDoProvider>(context);
-  //   todoProvider.loadTodos();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
             activeColor: Colors.indigo,
             headerProps: EasyHeaderProps(
               selectedDateStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: 20.0,),
-              selectedDateFormat: SelectedDateFormat.fullDateDayAsStrMY,
+              selectedDateFormat: SelectedDateFormat.fullDateDayAsStrDY,
             ),
             dayProps: const EasyDayProps(
               height: 56.0,

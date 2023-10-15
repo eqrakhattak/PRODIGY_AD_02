@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +28,10 @@ class _TodoWidgetState extends State<TodoWidget> {
       _todoTextDecoration = TextDecoration.lineThrough;
       _editButtonVisibility = false;
     });
+
+    final prefs = await SharedPreferences.getInstance();
+    final isDoneKey = 'isDone_${widget.todo.id}';
+    await prefs.setBool(isDoneKey, true);
   }
 
   void _unmarkAsDone() async {
@@ -38,6 +41,10 @@ class _TodoWidgetState extends State<TodoWidget> {
       _todoTextDecoration = TextDecoration.none;
       _editButtonVisibility = true;
     });
+
+    final prefs = await SharedPreferences.getInstance();
+    final isDoneKey = 'isDone_${widget.todo.id}';
+    await prefs.setBool(isDoneKey, false);
   }
 
   void _editTodo(ToDo todo) {

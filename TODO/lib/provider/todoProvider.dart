@@ -40,14 +40,26 @@ class ToDoProvider extends ChangeNotifier {
     }).toList();
   }
 
+  // Future<void> loadTodos() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final savedTodos = prefs.getStringList('todos');
+  //   if (savedTodos != null) {
+  //     todosList = savedTodos.map((jsonString) => ToDo.fromJson((jsonDecode(jsonString)))).toList();
+  //   }
+  // }
+
   Future<void> loadTodos() async {
     final prefs = await SharedPreferences.getInstance();
     final savedTodos = prefs.getStringList('todos');
     if (savedTodos != null) {
-      todosList = savedTodos.map((jsonString) => ToDo.fromJson((jsonDecode(jsonString)))).toList();
+      todosList = savedTodos.map((jsonString) {
+        final todo = ToDo.fromJson(jsonDecode(jsonString));
+        final isDoneKey = 'isDone_${todo.id}';
+        todo.isDone = prefs.getBool(isDoneKey) ?? false; // Load the isDone status
+        return todo;
+      }).toList();
     }
   }
-
 }
 
 
