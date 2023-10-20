@@ -85,72 +85,76 @@ class _TodoEditorWidgetState extends State<TodoEditorWidget> {
 
     final String todoControllerText = _todoTextController.text.trim();
 
-    return Container(
-      height: 320,
-      decoration: BoxDecoration(
-        color: Colors.yellow[400],
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.red),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: TextField(
-              controller: _todoTextController,
-              style: const TextStyle(
-                  color: Colors.black
-              ),
-            ),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Container(
+          height: constraints.maxHeight,
+          decoration: BoxDecoration(
+            color: Colors.yellow[400],
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
             children: [
-              Text(
-                timeText,
-                style: const TextStyle(
-                  fontSize: 30,
+              Container(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.red),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: TextField(
+                  controller: _todoTextController,
+                  style: const TextStyle(
+                      color: Colors.black
+                  ),
                 ),
               ),
-              const SizedBox(width: 20,),
-              ElevatedButton(
-                onPressed: () async {
-                  TimeOfDay? newtime = await showTimePicker(context: context, initialTime: time);
-                  //if Cancel => null
-                  if (newtime == null) return;
-                  //if OK => TimeOfDay
-                  setState(() => time = newtime);
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text('Select Time'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    timeText,
+                    style: const TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
+                  const SizedBox(width: 20,),
+                  ElevatedButton(
+                    onPressed: () async {
+                      TimeOfDay? newtime = await showTimePicker(context: context, initialTime: time);
+                      //if Cancel => null
+                      if (newtime == null) return;
+                      //if OK => TimeOfDay
+                      setState(() => time = newtime);
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    child: const Text('Select Time'),
+                  ),
+                ],
               ),
+              const Expanded(child: SizedBox()),
+              FloatingActionButton(
+                onPressed: () {
+                  if(todoControllerText.isNotEmpty){
+                    _editTodo();
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "Todo item can't be empty",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                    );
+                  }
+                },
+                tooltip: 'Edit Task',
+                backgroundColor: Colors.indigo,
+                child: const Icon(Icons.done, color: Colors.white,),
+              ),
+              const SizedBox(height: 18,)
             ],
           ),
-          const Expanded(child: SizedBox()),
-          FloatingActionButton(
-            onPressed: () {
-              if(todoControllerText.isNotEmpty){
-                _editTodo();
-              } else {
-                Fluttertoast.showToast(
-                  msg: "Todo item can't be empty",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                );
-              }
-            },
-            tooltip: 'Edit Task',
-            backgroundColor: Colors.indigo,
-            child: const Icon(Icons.done, color: Colors.white,),
-          ),
-          const SizedBox(height: 18,)
-        ],
-      ),
+        );
+      },
     );
   }
 }
