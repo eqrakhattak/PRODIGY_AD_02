@@ -98,6 +98,16 @@ class _TodoWidgetState extends State<TodoWidget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.todo.isDone == true){
+      _iconColor = Colors.green;
+      _todoTextDecoration = TextDecoration.lineThrough;
+      _editButtonVisibility = false;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       color: widget.todo.backgroundColor,

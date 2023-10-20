@@ -40,14 +40,6 @@ class ToDoProvider extends ChangeNotifier {
     }).toList();
   }
 
-  // Future<void> loadTodos() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final savedTodos = prefs.getStringList('todos');
-  //   if (savedTodos != null) {
-  //     todosList = savedTodos.map((jsonString) => ToDo.fromJson((jsonDecode(jsonString)))).toList();
-  //   }
-  // }
-
   Future<void> loadTodos() async {
     final prefs = await SharedPreferences.getInstance();
     final savedTodos = prefs.getStringList('todos');
@@ -58,6 +50,7 @@ class ToDoProvider extends ChangeNotifier {
         todo.isDone = prefs.getBool(isDoneKey) ?? false; // Load the isDone status
         return todo;
       }).toList();
+      // notifyListeners();
     }
   }
 }
